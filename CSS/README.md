@@ -17,11 +17,11 @@
 
 >HTML标签根据布局特性分为块级元素和内联元素，或者根据是否具有可替换内容分为替换元素和非替换元素，其中替换元素都属于内联水平元素；
 >
->常见块级元素：<div> 、<p> 、<li> 、<table>等；
+>常见块级元素：div 、p、li、table等；
 >
->常见内联元素：<span> 、<a> 、<img> 、<strong> 、<em>等；
+>常见内联元素：span 、a 、img 、strong 、em等；
 >
->常见替换元素：<img> 、<input> 、<select> 、<textarea> 、<video> <iframe> 、<canvas>等
+>常见替换元素：img 、input 、select 、textarea 、video 、iframe 、canvas等
 
 * 常用HTML标签见下图（图片来自大漠老师-w3cplus.com）
 
