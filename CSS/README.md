@@ -31,6 +31,8 @@
 
 
 
+
+
 * **块级元素（block）**
 
 块级元素在设计之初多用来布局用，最具代表的就是div元素，这元素就像路边小草，随处可见。
@@ -63,15 +65,29 @@
 
 | 元素    | 作用              | 元素         | 作用                   | 元素           | 作用               |
 | :------ | :---------------- | ------------ | ---------------------- | -------------- | ------------------ |
-| div     | 常用块级元素      | aside (h5)   | 伴随内容               | video(h5)      | 视频               |
-| h1-h6   | 标题级别          | section (h5) | 一个页面区段           | canvas(h5)     | 绘制图形           |
-| p       | 段落              | footer (h5)  | 区段尾或页尾           | pre            | 预格式化文本       |
-| ul/ol   | 无序/有序列表     | dd           | 定义列表中定义条目描述 | hgroup(h5)     | 标题组             |
-| table   | 表格              | dl           | 定义列表               | tfoot          | 表脚注             |
-| form    | 交互表单          | fieldset     | 表单元素分组           | figcaption(h5) | 图文信息组标题     |
-| hr      | 水平分割线        | address      | 联系方式信息           | noscript       | 可选脚本内容       |
-| header  | 区段头或页头 (h5) | blockquote   | 块引用                 | nav(h5)        | 定义导航链接       |
-| article | 文章内容 (h5)     | audio (h5)   | 音频播放               | main(h5)       | 规定文档的主要内容 |
+| div     | 常用块级元素      | aside (h5)   | 伴随内容               | hgroup(h5)     | 标题组             |
+| h1-h6   | 标题级别          | section (h5) | 一个页面区段           | tfoot          | 表脚注             |
+| p       | 段落              | footer (h5)  | 区段尾或页尾           | figcaption(h5) | 图文信息组标题     |
+| ul/ol   | 无序/有序列表     | dd           | 定义列表中定义条目描述 | noscript       | 可选脚本内容       |
+| table   | 表格              | dl           | 定义列表               | nav(h5)        | 定义导航链接       |
+| form    | 交互表单          | fieldset     | 表单元素分组           | main(h5)       | 规定文档的主要内容 |
+| hr      | 水平分割线        | address      | 联系方式信息           |                |                    |
+| header  | 区段头或页头 (h5) | blockquote   | 块引用                 |                |                    |
+| article | 文章内容 (h5)     | pre          | 预格式化文本           |                |                    |
+
+元素类型可用下面代码进行验证
+
+```javascript
+//创建元素
+var div = document.createElement('div');
+//生成元素
+document.body.appendChild(div);
+//获取元素display的取值，并在控制台返回结果
+console.log(window.getComputedStyle(div).display);
+//block
+```
+
+
 
 
 
