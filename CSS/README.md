@@ -27,7 +27,7 @@
 
 * 常用HTML标签见下图（图片来自大漠老师-w3cplus.com）
 
-![html 标签](/Users/statssun/Documents/GitHub/WebNote-Basis/CSS/images/html.png)
+![html 标签](https://github.com/s-sanyao/WebNote-Basis/edit/master/CSS/images/html.png)
 
 
 
