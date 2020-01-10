@@ -11,6 +11,8 @@
 
 本次文章先介绍CSS这么个魔法师，一起来见证魔法奇迹吧！
 
+**注明：**文章中很多内容参考张鑫旭《CSS世界》这本书，强烈推荐大家看看，看完后有种：哇，CSS世界原来如此美妙的感觉！
+
 
 
 ### 一、CSS世界基石--元素
@@ -59,7 +61,13 @@
 >
 >2、浮动和绝对定位的元素，display属性值会自动变为block，呈现块级元素特性；
 >
->3、块级元素与“display：block”不是一个概念，例如table元素display为table，li元素display为list-table，也都是块级元素；
+>3、因浮动元素会块状化，所以浮动元素设置text-align、vertical-align无效；
+>
+>4、块级元素与“display：block”不是一个概念，例如table元素display为table，li元素display为list-table，也都是块级元素；
+>
+>5、clear属性只有块级元素才生效;
+
+
 
 常见块级元素（标注h5的表示HTML5定义的新元素）：
 
@@ -75,7 +83,9 @@
 | header  | 区段头或页头 (h5) | blockquote   | 块引用                 |                |                    |
 | article | 文章内容 (h5)     | pre          | 预格式化文本           |                |                    |
 
-元素类型可用下面代码进行验证
+
+
+本文中元素类型可用下面代码进行验证
 
 ```javascript
 //创建元素
@@ -113,7 +123,9 @@ console.log(window.getComputedStyle(div).display);
 >
 > **注意点：**
 >
-> 
+> 1、对于非替换元素的纯内联元素，其可视高度由line-height决定，height设置无效；
+>
+> 2、内联元素垂直方向margin、padding仍会渲染，但不会影响布局，仅是在垂直方向与其他元素发生重叠；
 
 常见内联元素：
 
@@ -131,3 +143,26 @@ console.log(window.getComputedStyle(div).display);
 
 其余还有：script –  定义客户端脚本、bdo – 定义文字方向  、code – 计算机代码(在引用源码的时候需要)、dfn – 定义字段、 kbd – 定义键盘文本、samp – 范例计算机代码
 
+
+
+
+
+* **替换元素(replaced element)**
+
+> 定义：An element whose content is outside the scope of the CSS formatting model.
+>
+> 意思就是替换元素的内容是外部对象，不在CSS模型范围控制之内，其替换性体现在可以通过修改自己某个属性值来呈现不同内容；
+>
+> 例如img元素可以通过src属性来更换图片、input元素可以通过type属性来决定最终是输入框还是按钮；
+>
+> 特点：
+>
+> 1、内容可以修改某个属性值进行替换；
+>
+> 2、内容的外观不受页面上CSS的影响；
+>
+> 3、有自己的尺寸，在替换元素没有明确尺寸设定情况下，如video、canvas的默认尺寸是300像素*150像素、img的默认尺寸为0；
+>
+> 4、替换元素都是内联水平元素，其替换元素的vertical-align默认值baseline指元素的下边缘；
+>
+> 注意点：
