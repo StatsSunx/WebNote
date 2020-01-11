@@ -198,15 +198,17 @@ console.log(window.getComputedStyle(div).display);
 <div>欢迎来到CSS世界</div>
 //CSS
 div {
-	width:100px;
-	height:100px;
+  width:100px;
+  height:100px;
   padding:20px;
   margin:20px;
-	border: 10px solid skyblue;
+  border: 10px solid skyblue;
   background-color:pink;
 }
 ```
 
+
 ![cssbox](/Users/statssun/Documents/GitHub/WebNote-Basis/CSS/images/cssbox.png)
 
 注：这里关于CSS盒模型基础知识不多做介绍，需要补充的可去w3school.com.cn或developer.mozilla.org了解，本文章中以CSS标准盒模型为准进行讲解；
+
