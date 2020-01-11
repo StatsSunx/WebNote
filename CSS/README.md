@@ -198,11 +198,11 @@ console.log(window.getComputedStyle(div).display);
 <div>欢迎来到CSS世界</div>
 //CSS
 div {
-	width:100px;
-	height:100px;
+  width:100px;
+  height:100px;
   padding:20px;
   margin:20px;
-	border: 10px solid skyblue;
+  border: 10px solid skyblue;
   background-color:pink;
 }
 ```
