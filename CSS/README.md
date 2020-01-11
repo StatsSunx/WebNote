@@ -37,8 +37,6 @@
 
 * **块级元素（block）**
 
-块级元素在设计之初多用来布局用，最具代表的就是div元素，这元素就像路边小草，随处可见。
-
 >**定义：**
 >
 >A block-level element always starts on a new line and takes up the full width available.
@@ -102,8 +100,6 @@ console.log(window.getComputedStyle(div).display);
 
 
 * **内联元素（inline）**
-
-内联元素设计初衷是用来图文展示的，而图文是以前网站的重点关注对象，一切元素都是为了更好展示图文信息而存在，这点从html中内联元素和涉及图文展示的元素数量就可以看出来。
 
 > **定义：**
 >
@@ -188,3 +184,27 @@ console.log(window.getComputedStyle(div).display);
 
 
 到此HTML中比较重要的几个元素分类概念已介绍完毕，这几个元素分类的特点务必区分清楚，以便接下来学习CSS能事半功倍。另每个分类下的”注意点“若暂时不能理解，可先看文章后续内容，了解更多后再回头理解！
+
+
+
+
+
+### 二、CSS盒尺寸
+
+要说CSS中什么最多，那肯定是“盒子”最多。我猜很多人第一次写CSS代码时，估计都有下面类似代码出现，然后一个方方正正的盒子就出现了！
+
+```css
+//html
+<div>欢迎来到CSS世界</div>
+//CSS
+div {
+	width:100px;
+	height:100px;
+  padding:20px;
+  margin:20px;
+	border: 10px solid skyblue;
+  background-color:pink;
+}
+```
+
+注：文章中关于CSS最基础的知识不多做介绍，需要补充的可去w3school.com.cn或developer.mozilla.org了解；
