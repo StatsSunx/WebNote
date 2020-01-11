@@ -207,4 +207,6 @@ div {
 }
 ```
 
-注：文章中关于CSS最基础的知识不多做介绍，需要补充的可去w3school.com.cn或developer.mozilla.org了解；
+![cssbox](/Users/statssun/Documents/GitHub/WebNote-Basis/CSS/images/cssbox.png)
+
+注：这里关于CSS盒模型基础知识不多做介绍，需要补充的可去w3school.com.cn或developer.mozilla.org了解，本文章中以CSS标准盒模型为准进行讲解；
