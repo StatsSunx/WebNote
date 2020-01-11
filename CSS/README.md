@@ -29,7 +29,7 @@
 
 * 常用HTML标签见下图（图片来自大漠老师-w3cplus.com）
 
-![html 标签](https://github.com/s-sanyao/WebNote-Basis/edit/master/CSS/images/html.png)
+![html 标签](images/html.png)
 
 
 
@@ -208,7 +208,6 @@ div {
 ```
 
 
-![cssbox](/Users/statssun/Documents/GitHub/WebNote-Basis/CSS/images/cssbox.png)
+![cssbox](images/cssbox.png)
 
 注：这里关于CSS盒模型基础知识不多做介绍，需要补充的可去w3school.com.cn或developer.mozilla.org了解，本文章中以CSS标准盒模型为准进行讲解；
-
