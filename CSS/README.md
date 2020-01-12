@@ -11,7 +11,7 @@
 
 本次文章先介绍CSS这么个魔法师，一起来见证魔法奇迹吧！
 
-**注明: **文章中很多内容参考张鑫旭《CSS世界》这本书，强烈推荐大家看看，看完后会有种：哇，CSS世界原来如此美妙的感觉！
+**注明：**文章中很多内容参考张鑫旭《CSS世界》这本书，强烈推荐大家看看，看完后会有种：哇，CSS世界原来如此美妙的感觉！这本书个人觉得比较适合初级后进阶时阅读，书内容着重对属性表现原理的解释，特别是内联元素及内联盒模型部分的介绍，让人对布局时的各种怪异现象有了彻底的理解！
 
 
 
@@ -167,7 +167,7 @@ console.log(window.getComputedStyle(div).display);
 >
 > 2、内联替换元素可以通过display属性变为块级替换元素，尺寸规则同样遵循第一条注意事项；
 >
-> 3、通过content属性插入的对象可称为匿名的可替换元素，该属性改变的仅为视觉呈现层面内容，原被替换内容仍然存在，并可被搜索引擎抓取，另外content属性现在仅Chrome浏览器支持，Firefox浏览器需结合::after伪元素使用content属性；
+> 3、通过content属性插入的对象可称为匿名的可替换元素，该属性改变的仅为视觉呈现层面内容，不可被搜索引擎抓取，然后原被替换内容仍然存在，并仍可被搜索引擎抓取，另外content属性现在仅Chrome浏览器支持，其他浏览器需结合::after、::before伪元素使用content属性；
 >
 > 4、这里如果有不理解的地方推荐去看下《CSS世界》第四章中的第一节内容；
 
@@ -191,7 +191,7 @@ console.log(window.getComputedStyle(div).display);
 
 ### 二、CSS盒尺寸
 
-要说CSS中什么最多，那肯定是“盒子”最多。我猜很多人第一次写CSS代码时，估计都有下面类似代码出现，然后一个方方正正的盒子就出现了！
+要说CSS中什么最多，那肯定是“盒子”最多。我猜很多人第一次写CSS代码时，估计都有下面类似代码出现，然后一个方方正正的盒子就出现了，如下面图片所示！
 
 ```css
 //html
@@ -211,3 +211,93 @@ div {
 ![cssbox](images/cssbox.png)
 
 注：这里关于CSS盒模型基础知识不多做介绍，需要补充的可去w3school.com.cn或developer.mozilla.org了解，本文章中以CSS标准盒模型为准进行讲解；
+
+
+
+如上面图片所示，CSS盒尺寸中的盒子存在四大家族，分别是content-box、padding-box、 border-box、margin-box，依次对应content、padding、border、margin属性，图片中width和height属性默认指content-box的宽度和高度，下面来一个一个的介绍。
+
+
+
+* **Content**
+
+> **描述：**content属性与 ::before 以及 ::after 伪元素配合使用，来插入生成内容
+>
+> 说到content属性，大家见到的可能都是和伪元素一起来使用的，那是因为截止到现在该属性只有chrome浏览器下的所有属性才支持单独的content属性，其他浏览器仅在::before、::after伪元素中才支持；
+>
+> **特点：**
+>
+> 1、通过content属性插入的内容都是匿名替换元素，表现为内联水平元素；
+>
+> 2、该属性插入的内容仅为视觉呈现层面内容，搜索引擎无法抓取，所以关乎网站SEO优化方面的重要内容不要用该属性生成；
+>
+> 3、该属性生成的文本是无法选中、无法复制的，同样无法被搜索引擎或者屏幕阅读设备识别；
+>
+> 4、和伪元素一起使用时，在IE8下仅支持单冒号的伪元素，大家注意这个书写方式的兼容性问题；
+>
+> **用途：**
+>
+> 实际应用中content属性一般都应用在伪元素中，所以下面都以::before、::after伪元素应用为主
+>
+> 1、最常见的清除浮动带来的影响
+>
+> ```css
+> .clearfix::after {
+> 	content: '';
+> 	display: table;
+> 	clear: both;
+> }
+> /*注：clear属性只对块级元素有效，而伪元素利用content生成的内容都是内联水平的，所以这里需要设置display为table值，设置为block也一样*/
+> ```
+>
+> 
+>
+> 2、配合@font-face规则实现图标字体效果
+>
+> ```css
+> /*定义字体，这里的字体从icomoon.io网站下载得到，原始字体图标文件已同步到fonts文件夹下*/
+> @font-face {
+>   font-family: 'icomoon';
+>   src:  url('fonts/icomoon.eot');
+>   src:	url('fonts/icomoon.eot') format('embedded-opentype'),
+>   			url('fonts/icomoon.ttf') format('truetype'),
+>     		url('fonts/icomoon.woff') format('woff'),
+>     		url('fonts/icomoon.svg') format('svg');
+>   font-weight: normal;
+>   font-style: normal;
+> }
+> /*content对应字体图标*/
+> .icon-previous::before {
+>   content: "\ea18";
+> }
+> .icon-next::before {
+>   content: "\ea19";
+> }
+> .icon-pause::before {
+>   content: "\ea1d";
+> }
+> 
+> /*页面结构*/
+> <div>
+> 	<span class="icon-previous"></span>
+> 	<span class="icon-pause"></span>
+> 	<span class="icon-next"></span>
+> </div>
+> 
+> ```
+>
+> 插入字体图标效果如下：
+>
+> ![icofont](images/icofont.png)
+>
+> 
+>
+> 3、利用content的attr属性辅助图片内容生成
+>
+> ```css
+> 
+> ```
+>
+> 
+
+
+
