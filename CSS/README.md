@@ -1,4 +1,4 @@
-# CSS-Basis
+# CssNode
 **前言：**
 
 大家学习前端一般都是以HTML、CSS、javascript...这个顺序来，我也不例外。如果把网页比作是一栋房子，那么HTML就是房子的骨架，各类元素就如墙壁、门、窗一般作用不一、各司其职。
@@ -256,24 +256,24 @@ div {
 > ```css
 > /*定义字体，这里的字体从icomoon.io网站下载得到，原始字体图标文件已同步到fonts文件夹下*/
 > @font-face {
->   font-family: 'icomoon';
->   src:  url('fonts/icomoon.eot');
->   src:	url('fonts/icomoon.eot') format('embedded-opentype'),
->   			url('fonts/icomoon.ttf') format('truetype'),
->     		url('fonts/icomoon.woff') format('woff'),
->     		url('fonts/icomoon.svg') format('svg');
->   font-weight: normal;
->   font-style: normal;
+> font-family: 'icomoon';
+> src:  url('fonts/icomoon.eot');
+> src:	url('fonts/icomoon.eot') format('embedded-opentype'),
+> 			url('fonts/icomoon.ttf') format('truetype'),
+>  		url('fonts/icomoon.woff') format('woff'),
+>  		url('fonts/icomoon.svg') format('svg');
+> font-weight: normal;
+> font-style: normal;
 > }
 > /*content对应字体图标*/
 > .icon-previous::before {
->   content: "\ea18";
+> content: "\ea18";
 > }
 > .icon-next::before {
->   content: "\ea19";
+> content: "\ea19";
 > }
 > .icon-pause::before {
->   content: "\ea1d";
+> content: "\ea1d";
 > }
 > 
 > /*页面结构*/
@@ -291,15 +291,61 @@ div {
 >
 > 
 >
-> 3、利用content的attr属性辅助图片内容生成
+> 3、利用content的attr属性辅助图片内容生成，该技巧有两个重要点
+>
+> * 当img标签没有src属性、或者该属性值为空、再或者该属性值链接资源有误无法加载时，img即可运用before和after伪元素设置内容；
+> * 上面介绍说before和after无法应用到替换元素上，像img元素，而这里正是利用这一点实现图片未加载时或加载失败时以伪元素设置好的替代布局进行占位和提示，而图片正常显示时伪元素设置内容无效，不影响正常布局，可谓一举两得；
+> * 该技巧适用Chrome和Firefor浏览器，IE浏览器下存在支持问题；
 >
 > ```css
-> 
+> /*HTML*/
+> <img src="" alt="草帽路飞">
+> /*CSS*/
+> img {
+> 	display: inline-block;
+> 	width: 280px;
+> 	height: 200px;
+> /*隐藏alt中提示文字*/
+> 	color: transparent;
+> 	position: relative;
+> 	overflow: hidden;
+> 	margin: 30px;
+> }
+> img:not([src]) {
+> /*隐藏Chrome中img标签渲染时前面显示的小图标*/
+> visibility: hidden;
+> }
+> /*设置图片的占位背景*/
+> img::before {
+> 	content: '';
+> 	position: absolute;
+> 	left: 0;
+> 	width: 100%;
+> 	height: 100%;
+> 	background-color: #ccc;
+> 	visibility: visible;
+> }
+> /*设置alt信息显示条*/
+> img::after {
+> 	content: attr(alt);
+> 	position: absolute;
+> 	left: 0;
+> 	bottom: 0;
+> 	width: 100%;
+> 	line-height: 30px;
+> 	background-color: rgba(0, 0, 0, 0.5);
+> 	color: white;
+> 	font-size: 14px;
+> 	visibility: visible;
+> 	text-align: center;
+> }
 > ```
 >
 > 
 >
-> 
+> 最终效果如下图所示：
+>
+> ![before_after](images/before_after.png)
 
 
 
