@@ -153,7 +153,7 @@ console.log(window.getComputedStyle(div).display);
 >
 > 特点：
 >
-> 1、内容可以修改某个属性值进行替换；
+> 1、内容可以通过修改某个属性值进行替换；
 >
 > 2、内容的外观不受页面上CSS的影响；
 >
@@ -215,6 +215,111 @@ div {
 
 
 如上面图片所示，CSS盒尺寸中的盒子存在四大家族，分别是content-box、padding-box、 border-box、margin-box，依次对应content、padding、border、margin属性，图片中width和height属性默认指content-box的宽度和高度，下面来一个一个的介绍。
+
+
+
+* **width**
+
+该元素看似简单，但如果深入了解会发现也是深藏不露的属性之一。
+
+该元素开始前先介绍下"流"及“流体布局“的概念，本概念由张鑫旭在《CSS世界》中提出，想详细了解的推荐直接看此书。
+
+> **流：**可以想象为水流，就是CSS世界中引导元素排列和定位的一条看不见的水流。
+>
+> * 1、如果页面中添加一个块状元素，以div标签为代表，当没有设置宽度限制时，div元素默认宽度是100%与父级容器的，就像水倒进容器里自动填充可用空间，此时块级元素就具有水流般自适应的特性，表现为充分利用可用空间；
+>
+> * 2、如果再向该容器丢进几个内联元素，以span标签为代表，该元素就会像木块一样，依次水平排列浮在水流上面，此时内联元素就体现包裹性、不会换行的特性；
+>
+> **流体布局：**指利用元素”流“的特性实现各种布局效果，所以其往往具有自适应的特性，但不等同于“自适应布局”，就如表格布局也具有自适应性，但其不是“流体布局”。
+
+width的默认值为auto，而正是这个auto使得流的特性得以充分体现，其有以下几种宽度表现，针对块状和内联元素表现特征各不相同
+
+> **表现：**
+>
+> 1、充分利用可用空间：就如div等块状元素宽度默认是100%于父级容器的；
+>
+> 2、收缩和包裹：通俗说就是元素占据的空间或位置根据自身大小自动收缩到能包裹到自己即可，绝不贪得无厌占据更多空间，典型代表有浮动、绝对定位、inline-block元素和table元素；
+>
+> 3、收缩到最小：常出现在table-layout为auto的表格中，特别是列表中某列都是中文，而每列空间又不够用时，这时根据文字段行的规则，中文能断就断英文单词不能断开的特性，就容易出现中文文字列一柱擎天的效果；
+>
+> 4、超出容器限制：当内联元素设置white-space：nowrap时，或者内容很长的连续英文或数字时，元素内容会超出容器宽度的限制；
+>
+> **注意：**width作用到块状和内联的不同点（补充）：
+>
+> **块状元素：**1、width值为auto时，块状元素宽度表现为流体的特点，可以充分利用空间，这一特性可以延伸出“宽度分离原则”：CSS中width属性不与影响宽度的padding/border属性共存，width独立占用一层标签，如下方代码
+>
+> ```css
+> /*1、如想设置一个元素整体占据宽度为100px，该宽度包括margin+border+padding+content，则可以让width独立占据父级标签，在子标签中设置除width的其他盒尺寸，利用流体自适应性，自动分配空间
+> 2、该方法和box-size属性改变width作用细节的效果很像，大家自行取舍
+> */
+> .father {
+>   width: 100px;
+> }
+> .son {
+>   margin: 0 10px;
+>   padding: 10px;
+>   border: 1px solid;
+> }
+> ```
+>
+> 2、格式化宽度。格式化宽度仅出现在“绝对定位模型”中，也就是出现在position为absolute/fixed的元素中，对于非替换元素，当left/right或top/bottom对立方位值同时存在时，宽度大小相对于最近具有定位特性的祖先元素计算，并表现为流动性，会自动分配水平和垂直方向空间，可用来实现元素垂直居中（该特性在后面会有详细说明）
+>
+> **内联元素：**1、包裹性自适应性：就是元素尺寸由内部元素决定，但永远小于包含块的尺寸；
+>
+> 2、首选最小宽度：指元素最适合的最小宽度。例如竖排排列的汉字，最小宽度就是每个汉字的宽度，英文的最小宽度由最长的连续英文字符决定，图片等替换元素的最小宽度就是元素内容自身宽度
+>
+> 3、最大宽度：就是指元素可以有的最大宽度。如果内部没有块级元素或者块级元素没有设置具体宽度值，则最大宽度就是最大的连续内联盒子的宽度；
+
+
+
+* **Height**
+
+大家应该都知道文档流的默认方向是按垂直方向，由上往下、由左往右渲染的，CSS的默认流方向是水平的，这就导致宽度是有限的，而高度是无限的，所以width分配规则比较复杂，height就比较随意了
+
+>**特点：**
+>
+>1、支持百分比，但当父元素高度值为auto时，子元素在文档流中的高度百分比会被忽略；
+>
+>2、实现height：100%效果方法：
+>
+>a、显式设置高度值，可使用数值，或将html/body元素高度设置为height：100%；b、使用绝对定位，注意绝对定位的宽高百分比是相对于padding-box计算的，而非绝对定位元素的宽高百分比是相对于content-box计算的，所以使用时注意尺寸变化；
+>
+>```css
+>/*HTML*/
+><div class="box1"><div class="son1"></div></div>
+><div class="box2"><div class="son2"></div></div>
+>/*CSS*/
+>.box1,.box2 {
+>  width: 200px;
+>  height: 100px;
+>  padding: 30px;
+>  background-color: #ccc;
+>}
+>/*son1子元素非绝对定位，这里宽度默认是auto自动填充所以省略*/
+>.son1 {
+>  height: 100%;
+>  background-color: pink;
+>}
+>
+>/*son2子元素绝对定位*/
+>.box2 {
+>  position: relative;
+>}
+>.son2 {
+>  width: 100%;
+>  height: 100%;
+>  position: absolute;
+>  background-color: pink;
+>}
+>```
+>
+>
+>
+>非绝对定位和绝对定位下子元素百分比高度的差别如下：
+>
+>![height100%](images/height100%.png)
+
+
 
 
 
@@ -349,3 +454,88 @@ div {
 
 
 
+* **Padding**
+
+>**描述：**The padding properties specify the width of the padding area of a box.
+>
+>意思就是元素的内容与边界之间的距离，即content-box外边界到border-box内边界的距离
+>
+>**特点：**
+>
+>1、当box-size为默认值content-box时，对于块状元素设置padding会增加元素的尺寸，内联元素设置padding在垂直方向仍会渲染发生重叠，但不会影响布局，正常情况下看不到垂直方向的渲染变化；
+>
+>对于内联元素这一表现特点，可以在不影响当前布局下，增加链接或者按钮的点击区域大小
+>
+>```CSS
+>/*html*/
+><div>
+>	<a href="">我是链接</a>
+></div>
+>/*CSS*/
+>div {
+>  width: 100px;
+>  text-align: center;
+>  background-color: #bbb;
+>}
+>a {
+>  font-size: 16px;
+>  color: white;
+>  background-color: pink;
+>  /*增加垂直方向可点击区域*/
+>  padding: 1em 0;
+>}
+>```
+>
+>链接垂直方向添加padding后点击区域大小变化如图所示（粉色区域）：
+>
+>![padding_a](images/padding_a.png)
+>
+>2、支持百分比值，但无论水平还是垂直方向均是相对于该元素自身包含快宽度计算；
+>
+>3、不支持负值；
+>
+>4、ul/ol等部分元素初始内置padding-left值，在chrome下为40px；
+>
+>**应用：**
+>
+>与background-clip结合实现图形绘制
+>
+>```css
+>/*双层圆点效果*/
+>/*HTML*/
+>/*这里选用a标签是为后面例子中借助其锚链定位特点实现轮播图效果做铺垫*/
+><div>
+>	<a href="#"></a>
+>	<a href="#"></a>
+>	<a href="#"></a>
+></div>
+>
+>/*CSS*/
+>div {
+>  text-align: center;
+>  /*解决a标签与父元素div底部垂直方向存在间隙问题*/
+>  line-height:0;
+>}
+>div > a {
+>  display: inline-block;
+>  width: 30px;height: 30px;
+>  margin: 5px 20px;
+>  border: 7px solid transparent;
+>  border-radius: 50%;
+>  background-color: #ccc;
+>  background-clip: content-box;
+>  box-sizing: border-box;
+>}
+>div > a:hover {
+>  padding: 3px;
+>  border: 3px solid #bbb;
+>  background-clip: content-box;
+>  background-color: #aaa;
+>}
+>```
+>
+>
+>
+>双层圆点效果如下，鼠标滑过时显示双层圆点效果，离开时为实心单层圆点效果：
+>
+>![padding-clip](images/padding-clip.png)
