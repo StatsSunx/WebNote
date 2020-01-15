@@ -274,7 +274,7 @@ width的默认值为auto，而正是这个auto使得流的特性得以充分体�
 
 * **Height**
 
-大家应该都知道文档流的默认方向是按垂直方向，由上往下、由左往右渲染的，CSS的默认流方向是水平的，这就导致宽度是有限的，而高度是无限的，所以width分配规则比较复杂，height就比较随意了
+大家应该都知道文档流的渲染方向是按垂直方向，由上往下、由左往右渲染的，CSS的默认流方向是水平的，这就导致宽度是有限的，而高度是无限的，所以width分配规则比较复杂，height就比较随意了
 
 >**特点：**
 >
@@ -365,20 +365,20 @@ width的默认值为auto，而正是这个auto使得流的特性得以充分体�
 > src:  url('fonts/icomoon.eot');
 > src:	url('fonts/icomoon.eot') format('embedded-opentype'),
 > 			url('fonts/icomoon.ttf') format('truetype'),
->  		url('fonts/icomoon.woff') format('woff'),
->  		url('fonts/icomoon.svg') format('svg');
+>  			url('fonts/icomoon.woff') format('woff'),
+>  			url('fonts/icomoon.svg') format('svg');
 > font-weight: normal;
 > font-style: normal;
 > }
 > /*content对应字体图标*/
 > .icon-previous::before {
-> content: "\ea18";
+> 	content: "\ea18";
 > }
 > .icon-next::before {
-> content: "\ea19";
+> 	content: "\ea19";
 > }
 > .icon-pause::before {
-> content: "\ea1d";
+> 	content: "\ea1d";
 > }
 > 
 > /*页面结构*/
@@ -505,9 +505,9 @@ width的默认值为auto，而正是这个auto使得流的特性得以充分体�
 >/*HTML*/
 >/*这里选用a标签是为后面例子中借助其锚链定位特点实现轮播图效果做铺垫*/
 ><div>
->	<a href="#"></a>
->	<a href="#"></a>
->	<a href="#"></a>
+>	<a href=""></a>
+>	<a href=""></a>
+>	<a href=""></a>
 ></div>
 >
 >/*CSS*/
@@ -539,3 +539,346 @@ width的默认值为auto，而正是这个auto使得流的特性得以充分体�
 >双层圆点效果如下，鼠标滑过时显示双层圆点效果，离开时为实心单层圆点效果：
 >
 >![padding-clip](images/padding-clip.png)
+
+
+
+* **Margin**
+
+> **描述：**元素的外边距，天然透明没有背景色
+>
+> **特点：**
+>
+> 1、对于表现符合“充分可利用空间”的元素，则可以通过margin改变元素内部尺寸，其中对于普通元素只能改变水平方向的尺寸，对于绝对定位具有拉伸特性的元素，则水平和垂直方向均可以，举个例子说明；
+>
+> ```css
+> <div class="father">
+> 	<div class="son"></div>
+> </div>
+> 
+> .father {
+>   width: 300px;
+> }
+> .son {
+>   margin: 0 -20px;
+> }
+> ```
+>
+> 此时son因没有设置宽度值，表现为“充分可利用空间”的特性，所以左右设置负margin值后，相当于左右各增加20像素，son最终宽度为340像素；
+>
+> 可利用此特性实现两端对齐布局效果，一般情况下，实现列表水平对齐会这样设置
+>
+> ```css
+> li {
+> 	float: left;
+>   width: 100px;
+> 	margin-right: 10px;
+> }
+> ```
+>
+> 这时若想一排放下这三个列表，则右侧会存在一个由li元素margin-right带来的10像素间隙，这样就导致最终效果如下图所示:
+>
+> ![margin_1](images/margin_1.png)
+>
+> 当然这个问题如果不考虑IE8，可以用下列代码解决：
+>
+> ```CSS
+> li:nth-of-type(3n){
+> 	margin-right: 0;
+> }
+> ```
+>
+> 如果需要兼容IE8则可以试试下面这种利用margin负值改变父元素尺寸的方法解决
+>
+> ```css
+> /*HTML*/
+> <div class="box">
+> 	<ul>
+> 		<li>列表1</li>
+> 		<li>列表2</li>
+> 		<li>列表3</li>
+> 	</ul>
+> </div>
+> /*CSS*/
+> .box {
+>   width: 320px;
+>   background-color: #ccc;
+> }
+> .box > ul {
+>   height: 80px;
+>   /*清除ul默认内置的padding-right值，chrome下为40px*/
+>   paddin: 0;
+>   /*增加ul父元素的宽度*/
+>   margin-right: -10px;
+> }
+> .box > li {
+>   float: left;
+>   width: 100px;
+>   height: 100%;
+>   margin-right: 10px;
+>   list-style: none;
+>   background-color: pink;
+> }
+> ```
+>
+> 该方法实现原理就是：ul未设置宽度表现为流体性，其值为包含块的100%，这时设置margin-right：-10px，相当于ul的宽度为100%+10px，于是多出这10像素刚好让子元素li的最后一个margin-right：10px占据，而包含块box宽度值不变，表现为两端对齐效果
+>
+> 原理和最终效果如下图所示：
+>
+> ![margin_2](images/margin_2.png)
+>
+> 
+>
+> 2、和padding一样，支持百分比值，同时百分比值无论是水平还是垂直方向都是相对于宽度计算的；
+>
+> 3、块级元素上边距和下边距有时会合并为单个外边距，即我们常说的margin合并现象，注意前面定义说能发生合并的两个约束：
+>
+> > a、块级元素，不包括浮动和决定定位元素；
+> >
+> > b、只发生在垂直方向（在writing-mode文档流方向是默认值时），或严格讲是发生在和当前文档流方向相垂直的的方向上；
+> >
+> > c、margin合并现象下面单独讲；
+>
+> 4、当margin值为auto时会发生外边距自动填充现象，有以下规则
+>
+> >a、如果一侧定值，一侧auto，则auto为剩余空间大小；
+> >
+> >b、如果两侧均为auto，则平分剩余空间；
+> >
+> >c、初始值是0；
+>
+> 该规则可有以下应用：
+>
+> 1、右对齐/水平居中
+>
+> 通过margin-left：auto实现的右对齐，有时候比float更好用
+>
+> ```css
+> <div class="father">
+>     <div class="son"></div>
+> </div>
+> 
+> .father {
+>     width: 300px;
+>     height: 100px;
+>     background-color: #ccc;
+> }
+> .son {
+>     width: 200px;
+>     height: 80px;
+>     margin-left: auto;
+>     background-color: pink;
+> }
+> /*当子元素设置margin：0 auto时则会水平居中，这个效果大家平时应该比较常用不再展示*/
+> ```
+>
+> 效果如下图所示：
+>
+> ![margin_left](images/margin_left.png)
+>
+> 2、居中对齐
+>
+> 不知道大家从上面例子中发现没有，上面子元素margin在垂直方向设置auto值时却无法居中，这是因为垂直方向height没有流的特性，没法触发margin：auto自动分配填充的特点，这里可以通过设置writing-mode改变流方向后，则可以实现垂直居中，这个方法不常用不多介绍，下面介绍另外一种较常用的方法：绝对定位法
+>
+> ```css
+> <div class="father">
+>     <div class="son"></div>
+> </div>
+> .father {
+>     width: 300px;
+>     height: 100px;
+>     position: relative;
+>     background-color: #ccc;
+> }
+> .son {
+>     position: absolute;
+>   /*对立方向定位值均设置为0，使子元素具有格式化宽高的效果，以便垂直和水平方向均能产生流动性*/
+>     left: 0;right: 0;top: 0;bottom: 0;
+>     width: 200px;
+>     height: 80px;
+>     margin: auto;
+>     background-color: pink;
+> }
+> ```
+>
+> 效果如下图所示：
+>
+> ![margin_mid](images/margin_mid.png)
+>
+> 该方法先用绝对定位设置对立方位值，使子元素垂直和水平方向都具有流动性，满足margin：auto触发条件后，设置margin：auto值，利用其自动分配可用空间的特性，实现水平垂直居中的效果，该计算规则同样适用于替换元素；
+
+
+
+**margin合并情况总结**
+
+> **描述：**块级元素上边距和下边距有时会合并为单个外边距
+>
+> 从定义可以看出能发生合并有两个约束条件：
+>
+> 1、块级元素，不包括浮动和决定定位元素；
+>
+> 2、只发生在垂直方向（在writing-mode文档流方向是默认值时），或严格讲是发生在和当前文档流方向相垂直的的方向上；
+>
+> **合并规则：**
+>
+> 正正取大值、正负值相加、负负最负值
+>
+> **发生场景**
+>
+> 1、相邻兄弟元素margin合并，最常见、最根本；
+>
+> ```css
+> /*常见的p元素，天然自带margin-top和margin-bottom值，上下margin值为当前浏览器设置的默认字体大小，即1em*/
+> 
+> <p>第一行</p>
+> <p>第二行</p>
+> <p>第三行</p>
+> 
+> p {
+>   margin: 1em 0;
+>   background-color: #ccc;
+> }
+> ```
+>
+> 合并效果如图所示：
+>
+> ![margin_3](images/margin_3.png)
+>
+> 第一行p元素的margin-bottom和第二行p元素的margin-top合并，第二行p元素的margin-bottom和第三行p元素的margin-top合并；
+>
+> 
+>
+> 2、父级和第一个或者最后一个子元素marring合并，引起的奇怪现象最多；
+>
+> 最常见的现象就是页面设置一个块级的父元素，里面块级子元素想距离父元素上方一定距离，然后对子元素设置margin-top，这时发现不但子元素没有和父元素上方拉开距离，连父元素也跟着往下移动了！！！
+>
+> 如图我们希望得到下面这种效果：
+>
+> ![margin_4](images/margin_4.png)
+>
+> 下面开始写代码：
+>
+> ```css
+> /*HTML*/
+> <div class="father">
+>     <div class="son"></div>
+> </div>
+> /*CSS*/
+> .father {
+>     width: 300px;
+>     height: 150px;
+>     background-color: #ccc;
+> }
+> .son {
+>     height: 100px;
+>     margin-top: 25px;
+>     background-color: pink;
+> }
+> ```
+>
+> 但惊奇的发现代码渲染结果如下图所示，这和咱原本目标不一样啊！
+>
+> ![margin_5](images/margin_5.png)
+>
+> 产生这种现象的原因就是因为存在父子margin合并，父元素的margin-top：0与子元素的margin-top：25px合并，根据正正取大值的合并规则，最终外边距取值25像素，导致父元素也跟着掉下来了，就像父元素设置margin-top值一样，注意这里父元素的margin-top值仍为0，和合并值无关；
+>
+> 解决这种合并现象的方法有很多种：
+>
+> 对于margin-top合并，可用以下方法（满足一种即可）：
+>
+> 1、父元素设置为块状格式化上下文元素，即BFC，下篇讲定位布局时会详细说明；
+>
+> 2、父元素设置border-top值；
+>
+> 3、父元素设置padding-top值；
+>
+> 4、父元素和第一个子元素间添加内联元素进行分隔；
+>
+> 对于margin-bottom合并，可用以下方法（满足一种即可）：
+>
+> 1、父元素设置为块级格式化上下文元素；
+>
+> 2、父元素设置border-bottom值；
+>
+> 3、父元素设置padding-bottom值；
+>
+> 4、父元素和最后一个子元素间添加内联元素进行分隔；
+>
+> 5、父元素设置height、min-height或max-height；
+>
+> 上面解决父元素掉下来的现象可对父元素添加overflow: hidden即可，这里是用其创建了块级格式化上下文元素；
+>
+> 
+>
+> 3、空块级元素的margin合并；
+>
+> ```css
+> /*HTML*/
+> <div class="father">
+>     <div class="son"></div>
+> </div>
+> /*CSS*/
+> .father {
+>     overflow: hidden;
+>     background-color: #ccc;
+> }
+> .son {
+>   /*子元素设置上下外边距值为当前字体大小值*/
+>     margin: 1em 0;
+> }
+> ```
+>
+> 对于上面代码大家不妨先想一下最终父元素的高度会是多少？这里父元素已设置BFC，不会发生父子margin合并问题，父元素的高度完全由子元素的上下margin值撑开；
+>
+> 最终父元素高度值为1em,如图所示
+>
+> ![margin_6](images/margin_6.png)
+>
+> 有没有人觉得是2em呢？这里请大家再看一次margin合并的描述：块级元素上边距和下边距有时会合并为单个外边距，这里说上边距和下边距不能为同一个元素了吗？哈哈哈，还真没说，所以对于空块级元素其自身margin-top值会和自身margin-bottom值进行合并，再看下面代码
+>
+> ```css
+> /*HTML*/
+> <p>第一行</p>
+> <div></div>
+> <p>第二行</p>
+> /*大家觉得这里的div会影响上下p元素间距吗？*/
+> ```
+>
+> 直接看效果吧，完全没影响，两个p元素间间距仍为1em；
+>
+> ![margin_7](images/margin_7.png)
+>
+> 这里共发生三次margin合并：
+>
+> 1、第一个p元素margin-bottom和div的margin-top值合并，合并后div上边距有1em空隙；
+>
+> 2、第二个p元素margin-top和div的margin-bottom值合并，合并后div下边距有1em间隙；
+>
+> 3、中间div元素margin-top和自身的margin-bottom值再次合并，原本div上下均有的1em间隙这时再次合并为仅有的1em间隙；
+>
+> 
+>
+> 大家明白了吧，正是以上这些margin合并规则使得其有以下几点好处：
+>
+> 1、对于兄弟元素的margin合并：可以让图文信息的排版更自然；
+>
+> 2、对于父子margin合并：在页面中任何地方嵌套或直接放入任何裸div，都不会影响原来的块状布局；
+>
+> 3、对于元素自身margin合并：可用避免不小心遗落或者生成的空标签影响排版和布局；
+
+
+
+**margin无效情况总结 **
+
+>1、display值为inline的非替换元素垂直方向margin无效；
+>
+>2、表格中tr、td或display值为table-cell或table-row的元素margin无效；
+>
+>3、margin合并时，更改margin值可能无效，如相邻兄弟元素垂直方向最大的margin值为50像素，则只要修改的margin值小于50像素，则可能会无效；
+>
+>4、绝对定位元素的非定位方向margin值无效；
+>
+>5、定高容器的子元素的margin-bottom或者宽度定死的子元素的margin-right的定位失效；
+>
+>6、鞭长莫及导致margin失效；
+>
+>7、内联特性导致margin失效；
