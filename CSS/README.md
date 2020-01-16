@@ -1034,7 +1034,7 @@ width的默认值为auto，而正是这个auto使得流的特性得以充分体�
 >    width: 30px;
 >    height: 30px;
 >    border: 30px solid;
->  	border-radius: 50%;
+>		border-radius: 50%;
 >    border-color: #f07c82 #3170a7 #ff9900 #12a182;
 >  	/*当将右下左方向设置为透明时显示为似扇形，代码如下：
 >  	border-color: #f07c82 transparent  transparent;*/
@@ -1081,14 +1081,15 @@ width的默认值为auto，而正是这个auto使得流的特性得以充分体�
 ><div class="box6"></div>
 >.box6 {
 >    border: 45px solid;
->  	border-radius: 50%;
+>		border-radius: 50%;
 >    border-color: #f07c82 transparent transparent;
 >}
 >/*半圆形*/
 ><div class="box7"></div>
 >.box14 {
 >    border: 45px solid;
->  	border-radius: 50%;
+>		border-radius: 50%;
+>  /*将半圆旋转到需要的角度*/
 >    transform: rotate(-0.125turn)
 >    border-color: #f07c82 #3170a7 transparent transparent;
 >}
