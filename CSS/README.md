@@ -220,7 +220,7 @@ div {
 
 * **width** 
 
-该元素看似简单，但如果深入了解会发现也是深藏不露的属性之一。
+该元素看似简单，但如果深入了解会发现也是深藏不露的属性之一，也是之后很多内容理解的基础。
 
 该元素开始前先介绍下"流"及“流体布局“的概念，本概念由张鑫旭在《CSS世界》中提出，想详细了解的推荐直接看此书。
 
@@ -273,8 +273,6 @@ width的默认值为auto，而正是这个auto使得流的特性得以充分体�
 
 
 * **Height**
-
-大家应该都知道文档流的渲染方向是按垂直方向，由上往下、由左往右渲染的，CSS的默认流方向是水平的，这就导致宽度是有限的，而高度是无限的，所以width分配规则比较复杂，height就比较随意了
 
 >**特点：**
 >
@@ -532,9 +530,9 @@ width的默认值为auto，而正是这个auto使得流的特性得以充分体�
 >  background-clip: content-box;
 >  background-color: #aaa;
 >}
+>
+>/*此处也可以利用padding和background-clip来实现三条杠的效果，原理一样，大家不妨试一下*/
 >```
->
->
 >
 >双层圆点效果如下，鼠标滑过时显示双层圆点效果，离开时为实心单层圆点效果：
 >
@@ -840,6 +838,7 @@ width的默认值为auto，而正是这个auto使得流的特性得以充分体�
 > <p>第一行</p>
 > <div></div>
 > <p>第二行</p>
+> 
 > /*大家觉得这里的div会影响上下p元素间距吗？*/
 > ```
 >
@@ -863,11 +862,11 @@ width的默认值为auto，而正是这个auto使得流的特性得以充分体�
 >
 > 2、对于父子margin合并：在页面中任何地方嵌套或直接放入任何裸div，都不会影响原来的块状布局；
 >
-> 3、对于元素自身margin合并：可用避免不小心遗落或者生成的空标签影响排版和布局；
+> 3、对于元素自身margin合并：可以避免不小心遗落或者生成的空标签影响排版和布局；
 
 
 
-**margin无效情况总结 ** 
+**margin无效情况总结** 
 
 >1、display值为inline的非替换元素垂直方向margin无效；
 >
@@ -875,10 +874,141 @@ width的默认值为auto，而正是这个auto使得流的特性得以充分体�
 >
 >3、margin合并时，更改margin值可能无效，如相邻兄弟元素垂直方向最大的margin值为50像素，则只要修改的margin值小于50像素，则可能会无效；
 >
->4、绝对定位元素的非定位方向margin值无效；
+>4、绝对定位元素的非定位方向margin值无效，就如当绝对定位元素设置left和top定位值后，right和bottom方向值属于auto状态未定位，这时设置右侧或底部的外边距看不到效果；
 >
 >5、定高容器的子元素的margin-bottom或者宽度定死的子元素的margin-right的定位失效；
 >
->6、鞭长莫及导致margin失效；
+>6、内联特性导致margin失效；
+
+
+
+* **Border** 
+
+>**描述：** 设置元素的边框，可用于设置以下一个或多个属性值：border-width、border-style、border-color；
 >
->7、内联特性导致margin失效；
+>**特点：**
+>
+>1、不支持百分比；
+>
+>2、border-width支持若干关键子：thin(1px)、medium(3px)、thick(4px)，其默认值是medium，默认值是medium 3像素的原因是因为：border-width值不支持小数，当其border-style为double双划线时，至少需要3像素才能显示出来；
+>
+>3、border-style常用样式有四种：solid（实线边框）、dashed（虚线边框）、dotted（虚点边框）、double（双线边框），其默认值是none，所以如果不设置border-style时，则无边框出现，同时可利用此特点设置border-某方向：none使某其无边框显示，也可通过设置border-某方向：0来消除边框；
+>
+>此处可以利用border-style：double实现三条杠的效果
+>
+>```css
+>/*HTML*/
+><i class="icon-menu"></i>
+>/*CSS*/
+>.icon-menu {
+>    display: inline-block;
+>    width: 30px;
+>    height: 5px;
+>    border-top: 15px double;
+>    border-bottom: 5px solid;
+>    color: #aaa;
+>}
+>```
+>
+>效果如下图所示：
+>
+>这里第一条杠与第二条杠之间空隙由border-style：double双线产生，第二条杠与第三条杠之间间隙由元素的width：30px和height：5px形成；
+>
+>![border_1](images/border_1.png)
+>
+>4、border-color有一重要特性就是：border-color的默认颜色是当前color的色值，意思就是如果没有设置border-color值，则边框跟随当前元素的color值作为边框的颜色；
+>
+>如上例中，border未设置颜色，此时颜色就默认跟随color的颜色显示，在CSS3中就新增了currentcolor这一变量，表示当前标签所继承的文字颜色，这里暂时先不介绍，有兴趣的可搜索一下，推荐看张鑫旭的博客；
+>
+>此处可利用border-color这一颜色特性，实现一个带有加号框框的效果：
+>
+>```css
+>/*HTML*/
+><div class="box"></div>
+>/*CSS*/
+>.box {
+>    width: 100px;
+>    height: 100px;
+>    border: 2px dashed;
+>    position: relative;
+>    overflow: hidden;
+>		color: #ccc;
+>    transition: color .25s;
+>}
+>.box::before, .box2::after {
+>    content: '';
+>    position: absolute;
+>    top: 50%;
+>    left: 50%;
+>}
+>.box::before {
+>    width: 30px;
+>    border-top: 4px solid;
+>    margin: -2px 0 0 -15px;
+>}
+>.box::after {
+>    height: 30px;
+>    border-left: 4px solid;
+>    margin: -15px 0 0 -2px;
+>}
+>.box:hover {
+>    color: #06c;
+>}
+>```
+>
+>实现效果如下：
+>
+>![border_2](images/border_2.png)
+>
+>**应用：**
+>
+>1、border透明边框的应用
+>
+>前面说过可以通过padding来增加元素的可点击区域，这里利用border透明边框同样可以实现
+>
+>```css
+>/*HTML*/
+><input id="search" type="search" value="我是初始值" required>
+><label for="search" class="icon-clear"></label>
+>
+>/*CSS*/
+>input[type="search"] {
+>    width: 200px; height: 40px;
+>    padding: 10px 40px 10px 10px;
+>    border: 1px solid #ccc;
+>    box-sizing: border-box;
+>}
+>.icon-clear {
+>    width: 16px; height: 16px;
+>    margin: 1px 0 0 -38px;
+>    border: 11px solid transparent;
+>    border-radius: 50%;
+>    background: #999;
+>    color: white;
+>    position: absolute;
+>    visibility: hidden;
+>}
+>.icon-clear:before {
+>    content: "×";
+>}
+>input:valid + .icon-clear { 
+>    visibility: visible;
+>}
+>
+>/*JS*/
+>var eleLabel = document.querySelector('label[for="search"]'),
+>eleSearch = document.getElementById('search');
+>
+>if (eleLabel && eleSearch) {
+>    eleLabel.onclick = function() {
+>        eleSearch.value = '';
+>    };
+>}
+>/*我这里实现时那个删除小图标偷懒用了字体图标，上面代码是书中提供的原代码，供大家参考*/
+>```
+>
+>效果如图所示：
+>
+>![border_3](images/border_3.png)
+>
+>这里还有一个小知识点：在CSS3之前background定位时是以左上角数值定位，当时的背景定位只能取2个值，如果想让背景相对于右下角定位就比较困难，这时就可以利用border透明边框来实现：background背景图片是相对于padding-box定位的，也就是说background-position：100%的位置是不会把border-width计算在内的，这时元素右边或者底边就可以添加透明的边框来模拟定位效果，效果不再演示，感兴趣的可以试下；
