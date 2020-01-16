@@ -1012,3 +1012,94 @@ width的默认值为auto，而正是这个auto使得流的特性得以充分体�
 >![border_3](images/border_3.png)
 >
 >这里还有一个小知识点：在CSS3之前background定位时是以左上角数值定位，当时的背景定位只能取2个值，如果想让背景相对于右下角定位就比较困难，这时就可以利用border透明边框来实现：background背景图片是相对于padding-box定位的，也就是说background-position：100%的位置是不会把border-width计算在内的，这时元素右边或者底边就可以添加透明的边框来模拟定位效果，效果不再演示，感兴趣的可以试下；
+>
+>2、border图形构建
+>
+>a、实色边框的转角连接表现
+>
+>```css
+>/*方形 ---> 梯形*/
+><div class="box1"></div>
+>.box1 {
+>    width: 30px;
+>    height: 30px;
+>    border: 30px solid;
+>    border-color: #f07c82 #3170a7 #ff9900 #12a182;
+>  	/*当将右下左方向设置为透明时显示为梯形，代码如下：
+>  	border-color: #f07c82 transparent  transparent;*/
+>}
+>/*圆形 ---> 扇形*/
+><div class="box2"></div>
+>.box2 {
+>    width: 30px;
+>    height: 30px;
+>    border: 30px solid;
+>  	border-radius: 50%;
+>    border-color: #f07c82 #3170a7 #ff9900 #12a182;
+>  	/*当将右下左方向设置为透明时显示为似扇形，代码如下：
+>  	border-color: #f07c82 transparent  transparent;*/
+>}
+>```
+>
+>转角填色表现及可构建图形效果如图：
+>
+>![border_4](images/border_4.png)
+>
+>b、三角形系列，元素宽高需为0：
+>
+>```css
+>/*等腰三角形*/
+><div class="box3"></div>
+>.box4 {
+>    border: 45px solid;
+>    border-color: #f07c82 transparent transparent;
+>}
+>/*更窄的等腰三角形*/
+><div class="box4"></div>
+>.box4 {
+>    border-width: 45px 25px;
+>    border-style: solid;
+>    border-color: #f07c82 transparent transparent;
+>}
+>/*直角三角形*/
+><div class="box5"></div>
+>.box5 {
+>    border-width: 45px 25px;
+>    border-style: solid;
+>    border-color: #f07c82 #3170a7 transparent transparent ;
+>}
+>```
+>
+>各三角形效果如下：
+>
+>![border_5](images/border_5.png)
+>
+>c、圆型系列，元素宽高需为0：
+>
+>```css
+>/*扇形*/
+><div class="box6"></div>
+>.box6 {
+>    border: 45px solid;
+>  	border-radius: 50%;
+>    border-color: #f07c82 transparent transparent;
+>}
+>/*半圆形*/
+><div class="box7"></div>
+>.box14 {
+>    border: 45px solid;
+>  	border-radius: 50%;
+>    transform: rotate(-0.125turn)
+>    border-color: #f07c82 #3170a7 transparent transparent;
+>}
+>```
+>
+>效果如图所示：
+>
+>![border_6](images/border_6.png)
+
+
+
+以上盒尺寸部分的主要元素已介绍完毕，包括width、height、content、padding、margin、border等主要元素，如果有疑问或者有错误的地方欢迎提出，后面还有更精彩的部分，此系列文章会根据我个人知识的增长而持续更新，欢迎大家收藏哦！
+
+若觉得不错动动小手点个赞或给个star什么的，我就是这么厚脸皮，哈哈哈！
