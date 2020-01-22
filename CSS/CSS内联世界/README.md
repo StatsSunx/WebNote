@@ -203,3 +203,42 @@ line-heigh可谓是内联元素的高度之本，本节开始前请大家掌握�
 > 2、我们都知道每个内联元素组成的行框盒子前都会有一个“幽灵空白节点”，这里.box设置的line-height就是作用在这个空白节点上面，使得在.content元素前面撑起一个高位100像素、宽度为0的内联元素;
 >
 > 3、内联元素默认都是以基线对齐的，这里对.content设置vertical-align: middle来调整多行文本的垂直居中位置，以便实现垂直居中效果；
+
+
+
+* **vertical-align** 
+
+一般存在line-height起作用的地方，vertical-align也一定起作用，而且还是很多怪异现象的背后黑手，这里先为它们形影不离的友情干一杯，接下来慢慢介绍这个背后的黑手！
+
+> **描述：** 用来指定行内元素或者表格元素的垂直对齐方式；
+>
+> **特点：** 
+>
+> 1、vertical-align起作用的前提条件是：只能应用于内联元素或display值为table-cell的元素；
+>
+> 2、vertical-align的属性值可以分为4类：
+>
+> a、线类：如baseline、top、middle、bottom，vertical-align的默认值是baseline；
+>
+> ```css
+> /*HTML*/
+> <div>x<i class="icon-next" style="vertical-align: top"></i></div>
+> <div>x<i class="icon-next" style="vertical-align: middle"></i></div>
+> <div>x<i class="icon-next" style="vertical-align: baseline"></i></div>
+> <div>x<i class="icon-next" style="vertical-align: bottom"></i></div>
+> /*CSS*/
+> div {
+>     display: inline-block;
+>     margin: 20px 10px;
+>     background-color: #eee;
+>     font-family: 'Songti SC',sans-serif;
+>     font-size: 50px;
+> }
+> i {
+>     font-size: 20px;
+> }
+> ```
+>
+> 各线类取值对齐的位置如下图所示：
+>
+> ![inline_10](../images/inline_10.png)
