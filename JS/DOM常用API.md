@@ -212,3 +212,231 @@ console.log(textNode.data);
 
 
 
+#### 二、DOM扩展
+
+以下案例HTML结构
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>DOM常用API</title>
+</head>
+<body>
+<!-- DOM扩展 -->
+    <div class="myClass user" data-myname="dataset">
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <div></div>
+        <p></p>
+        <a href="#"></a>
+    </div>
+    <div id="myId" class="myClass">
+        <h1></h1>
+        <h2></h2>
+        <h3></h3>
+        <p></p>
+        <a href="#"></a>
+    </div>
+<body>
+<head>
+```
+
+1、选择符API
+
+```javascript
+//一、选择符API		
+		//querySelector()或querySelectorAll由document或element类型实例调用
+    //querySelector()返回查找到的第一个匹配元素
+    var div = document.querySelector('div');
+    var div1 = document.querySelector('#myId');
+    var div2 = document.querySelector('.myClass');
+    console.log(div1 === div2);
+    console.log(div === div2);
+
+    //querySelectorAll()返回一个novelist，包含所有匹配到的元素
+    var divAll = document.querySelectorAll('div');
+    console.log(divAll.length);
+    console.log(divAll);
+
+    //matchesSelector()调用元素如果和选择符匹配，则返回true
+    //chrome
+    console.log(div1.webkitMatchesSelector('#myId'));
+    //firefox
+    console.log(div1.mozMatchesSelector('#myId'));
+```
+
+2、元素遍历
+
+```javascript
+//二、元素遍历
+    //返回子元素个数（不包括文本节点和注释）
+    childElementCount
+    //指向第一个子元素
+    firstElementChild
+    //指向最后一个子元素
+    lastElementChild
+    //指向前一个同辈元素
+    previousElementSibling
+    //指向后一个同辈元素
+    nextElementSibling
+
+    元素遍历
+    function traversalElement(element) {
+        var element = document.querySelector(element);
+        // console.log(element.childElementCount);
+        var i,
+            len,
+            child = element.firstElementChild,
+            nodeList = new Array();
+            nodeList[0] = child;
+        while (child != element.lastElementChild) {
+            //已知其是元素
+            // processChild(child);
+            child = child.nextElementSibling;
+            nodeList.push(child);
+        }
+        return console.log(nodeList);
+    }
+    traversalElement('div');
+    traversalElement('#myId');
+```
+
+3、HTML5
+
+```javascript
+//三、HTML5
+    //类操作的API扩充
+    var div = document.querySelector('#myId');
+    var div1 = document.getElementsByClassName('myClass');
+
+    div.classList.add('current');
+    console.log(div.classList.contains('myClass'))
+    div.classList.toggle('user');
+
+    console.log(div.classList.length);
+    console.log(div.classList);
+
+    div.classList.remove('current');
+    console.log(div.classList);
+
+
+    //焦点管理
+    var div = document.querySelector('#myId');
+    var a = div.querySelector('a');
+    a.focus();
+    console.log(a === document.activeElement);
+    console.log(document.hasFocus());
+
+
+    //HTMLDocument的变化
+    //readyState属性
+    //指示文档是否已加载完成，有complete和loading两个值
+    console.log(document.readyState);
+    if (document.readyState === 'complete') {
+        console.log('The document is completed!')
+    }else {
+        console.log('The document is loading!')
+    };
+
+
+    //兼容模式
+    //compatMode有两个值：标准模式=CSS1Compat、混合模式=BackCompat
+    if (document.compatMode === 'CSS1Compat') {
+        console.log('standards mode');
+    }else {
+        console.log('Quirks mode');
+    };
+
+
+    //head属性
+    var head = document.head || document.getElementsByTagName('head')[0];
+
+
+    //字符集属性
+    //当前问题实际使用的字符集
+    console.log(document.charset);
+    //浏览器及操作系统设置的文档默认字符集
+    console.log(document.defaultCharset);
+
+
+    //自定义数据属性
+    //HTML5规定元素添加自定义属性必须加上data-前缀
+    var div = document.querySelector('.user');
+    console.log(div.dataset);
+    console.log(div.dataset.myname);
+    div.dataset.appid = '12345';
+    console.log(div.dataset);
+
+
+    //插入标记
+    //innerHTML会替换掉div原所有的子节点
+    //以下元素不支持innerHTML:frameset\head\html\style\table\tbody\thead\tfoot\tr
+    var div = document.querySelector('.user');
+    div.innerHTML = 'hello world';
+    div.innerHTML = "hello & welcome, <b>'reader'!</b>";
+    console.log(div.innerHTML);
+    document.head.innerHTML = "<style type='text/css'>body {background-color: gray}</style>";
+
+    //outerHTML会替换掉掉调用元素所有DOM子树包括自身
+    console.log(div.outerHTML);
+    div.outerHTML = "<p>this is a paragraph</p>";
+
+    // //insertAdjacentHTML两个参数：插入位置和要插入的HTML文本
+    // //在div前面添加兄弟元素
+    div.insertAdjacentHTML("beforebegin", "<p>this is a paragraph</p>");
+    // //在div里面作为第一个元素插入
+    div.insertAdjacentHTML("afterbegin", "<p>this is a paragraph</p>");
+    // // 在div里面作为最后一个元素插入
+    div.insertAdjacentHTML("beforeend", "<p>this is a paragraph</p>");
+    // // 在div后面添加兄弟元素
+    div.insertAdjacentHTML("afterend", "<p>this is a paragraph</p>");
+
+
+    //内存优化问题
+    //为页面添加多个列表
+    var ul = document.querySelector('ul'),
+        values = ['列表1', '列表2', '列表3', '列表4', '列表5'],
+        itemsHtml = "";
+    for (var i = 0, len = values.length; i < len; i++) {
+        itemsHtml += "<li>" + values[i]+ "</li>";
+    };
+    ul.innerHTML = itemsHtml;
+
+
+    //滚动
+    //使指定元素出现在视图窗口中
+    scrollIntoView();
+```
+
+4、专有扩展
+
+```javascript
+//四、专有扩展
+    //contains()方法
+    console.log(document.documentElement.contains(document.body));
+    							console.log(document.documentElement.compareDocumentPosition(document.querySelector('div')));
+    console.log(document.documentElement.compareDocumentPosition(document.head));
+
+    //插入文本
+    var div = document.querySelector('.user');
+    //插入的文本会替换元素中所有内容和子节点
+    div.innerText = 'hello world';
+    //innerText只插入文本，无法识别元素标签
+    div.innerText = "hello & welcome, <b>'reader'!</b>";
+
+    //滚动
+    //当前页面不可见时滚动，在窗口内时不处理，作用与元素容器
+    scrollIntoViewIfNeeded();
+    //将元素内容滚动指定的页面高度，影响元素自身
+    scrollByPages();
+    //将元素内容滚动指定的行高，影响元素自身
+    scrollByLines();
+```
+
+
+
