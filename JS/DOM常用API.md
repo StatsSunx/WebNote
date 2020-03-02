@@ -214,7 +214,7 @@ console.log(textNode.data);
 
 #### 二、DOM扩展
 
-以下案例HTML结构
+以下案例的HTML结构
 
 ```html
 <!DOCTYPE html>
@@ -439,4 +439,353 @@ console.log(textNode.data);
 ```
 
 
+
+### 三、DOM2、DOM3
+
+以下案例的HTML结构
+
+```javascript
+//HTML
+<div id="div1" class="myClass" style="background-color: #eee; border: 1px solid red">
+    <h3>三级标题</h3>
+    <h4>四级标题</h4>
+    <p>我是一个段落我是一个段落</p>
+    <ul>
+        <li>列表1</li>
+        <li>列表2</li>
+        <li>列表3</li>
+    </ul>
+</div>
+//CSS
+<style type="text/css">
+    #div1 {
+        background-color: lightblue;
+        width: 200px;
+        height: 100px;
+        box-sizing: border-box;
+        overflow: auto;
+    }
+    .myClass {
+        margin: 30px;
+    }
+</style>
+```
+
+
+
+1、样式
+
+```javascript
+//访问元素样式
+    var div1 = document.querySelector('#div1');
+    console.log(div1.style);
+    console.log(div1.style.length)
+    console.log(div1.style.backgroundColor);
+    //返回指定元素的属性值对
+    function getElementStyleValues(element) {
+        var element = document.querySelector(element),
+            prop,
+            value,
+            i,
+            len = element.style.length;
+        for (i=0; i < len; i++) {
+            prop = element.style[i];
+            value = element.style.getPropertyValue(prop);
+            console.log(prop + ':' + value);
+        }
+    }
+    getElementStyleValues('#div1');
+
+
+//计算的样式
+    //style特性不能包含从其他样式表中层叠而来的元素样式信息
+    //需要借助document.defaultView中的方法getComputedStyle，IE中是currenStyle
+    var div1 = document.querySelector('#div1');
+    var computedStyle = document.defaultView.getComputedStyle(div1, null);
+    console.log(computedStyle);
+    console.log(computedStyle.length);
+    console.log(computedStyle.backgroundColor);
+    //返回元素样式混合计算后的属性值对
+    function getElementComputedStyle(element) {
+        var element = document.querySelector(element),
+            prop,
+            value,
+            i,
+            len = computedStyle.length;
+
+        if (element.currenStyle) {
+            //IE
+            computedStyle = element.currenStyle;
+        }else {
+            computedStyle = document.defaultView.getComputedStyle(element, null);
+        }
+
+        for (i=0; i < len; i++) {
+            prop = computedStyle[i];
+            value = computedStyle.getPropertyValue(prop);
+            console.log(prop + ':' + value);
+        }
+    }
+    getElementComputedStyle('#div1');
+
+
+//操作样式表
+    //检验浏览器是否支持styleSheets属性
+    console.log(document.implementation.hasFeature('styleSheets', '2.0'));
+    console.log(document.styleSheets);
+    //获得元素的样式表
+    function getStyleSheet(element) {
+        var element = document.querySelector(element);
+        //IE支持styleSheet
+        return element.styleSheet || element.sheet;
+    }
+    // console.log(getStyleSheet('div'));
+
+    //CSS规则
+    var sheet = document.styleSheets[1];
+    //IE支持rules属性
+    var rules = sheet.cssRules || sheet.rules;
+    var rule = rules[1];
+    console.log(rule.cssText);
+    console.log(rule.selectorText);
+    console.log(rule.style);
+    console.log(rule.type);
+    console.log(rule.style.margin);
+    rule.style.margin = '40px';
+
+    //创建规则insertRule()
+    //IE支持
+    sheet.addRule("p","background-color: pink", 2);
+    //除IE外浏览器支持
+    sheet.insertRule("li {background-color: red}", 3);
+
+    //样式规则插入函数（兼容版）
+    function insertRules(sheet, selectorText, cssText, position) {
+        if (sheet.insertRule) {
+            sheet.insertRule(selectorText + "{" + cssText + "}", position)
+        }else if(sheet.addRule){
+            sheet.addRule(selectorText ,cssText, position);
+        }
+    }
+    insertRules(document.styleSheets[1],
+        "h4", "background-color: #ddd", 2);
+
+    //删除规则,轻易不要用
+    //IE支持
+    sheet.removeRule(3);
+    //除IE外浏览器支持
+    sheet.deleteRule(2);
+```
+
+2、元素大小
+
+```javascript
+//偏移量
+        //元素在屏幕上占用的所有可见空间，只读属性
+        /*
+        offsetHeight:   元素在垂直方向占据的空间、元素垂直可见高度+水平滚动条高度+上下边框高度
+        offsetWidth:    元素在水平方向占据的空间、元素水平可见宽度+垂直滚动条宽度+左右边框宽度
+        offsetTop: 元素上外边框距包含元素上内边框之间像素距离
+        offsetLeft: 元素左外边框距包含元素左内边框直接像素距离
+        */
+        var div1 = document.querySelector('#div1');
+        console.log(div1.offsetWidth);
+        console.log(div1.offsetHeight);
+        console.log(div1.offsetLeft);
+        console.log(div1.offsetTop);
+
+        //获得元素距离页面左边的偏移量
+        function getElementLeft(element) {
+            var element = document.querySelector(element);
+            var actualLeft = element.offsetLeft;
+            var currentContainer = element.offsetParent;
+            while (currentContainer != null) {
+                actualLeft += currentContainer.offsetLeft;
+                currentContainer = currentContainer.offsetParent;
+            }
+            return actualLeft;
+        }
+
+        console.log(getElementLeft("ul"));
+        console.log(getElementLeft("li"));
+
+        //获得元素距离页面顶部的偏移量
+        function getElementTop (element) {
+            var element = document.querySelector(element),
+                actualTop = element.offsetTop,
+                currentContainer = element.offsetParent;
+
+            while (currentContainer != null) {
+                actualTop += currentContainer.offsetTop;
+                currentContainer = currentContainer.offsetParent;
+            }
+            return actualTop;
+        }
+        console.log(getElementTop("h3"));
+
+//客户区大小
+        //元素内容及其内边距所占空间大小
+        var ul = document.querySelector('ul');
+        console.log(ul.clientWidth);
+        console.log(ul.clientHeight);
+
+        //获得浏览器窗口大小
+        function getViewPort () {
+            if (document.compatMode === 'BackCompat') {
+                return {
+                    width: document.body.clientWidth,
+                    height: document.body.clientHeight
+                };
+            }else {
+                return {
+                    width: document.documentElement.clientWidth,
+                    height: document.documentElement.clientHeight
+                };
+            }
+        }
+        console.log(getViewPort());
+
+//滚动大小
+        //滚动大小指包含滚动内容的元素的大小
+        var div1 = document.querySelector('#div1');
+        //元素在没有滚动条的情况下，元素内容的总宽度，不包括边框和滚动条
+        console.log(div1.scrollWidth);
+        //元素在没有滚动条的情况下，元素内容的总高度，不包括边框
+        console.log(div1.scrollHeight);
+        //被隐藏在内容区域左侧元素的像素数
+        console.log(div1.scrollLeft);
+        //被隐藏在内容区域上方元素的像素数
+        console.log(div1.scrollTop);
+
+        //true
+        console.log(div1.clientWidth === div1.scrollWidth);
+        console.log(div1.clientHeight === div1.scrollHeight);
+        //确定文档的总大小时要取客户区高度和滚动高度的最大值
+        var docWidth = Math.max(document.documentElement.scrollWidth, document.documentElement.clientWidth);
+        var docHeight = Math.max(document.documentElement.scrollHeight, document.documentElement.clientHeight);
+
+        //使元素回滚到顶部
+        function scrollToTop (element) {
+            var element = document.querySelector(element);
+            if (element.scrollTop != 0) {
+                element.scrollTop = 0;
+            }
+        }
+
+//确定元素大小
+        function getBoundingClientRect1(element) {
+            var element = document.querySelector(element);
+            //将坐标归零
+            if (typeof arguments.callee.offset != 'number') {
+                var scrollTop = document.documentElement.scrollTop,
+                    temp = document.createElement('div');
+                temp.style.cssText = 'position: absolute;left: 0;top: 0;';
+                document.body.appendChild(temp);
+                arguments.callee.offset = -temp.getBoundingClientRect().top - scrollTop;
+                document.body.removeChild(temp);
+                temp = null;
+            }
+
+            var rect = element.getBoundingClientRect();
+            var offset = arguments.callee.offset;
+
+            return {
+                left: rect.left + offset,
+                right: rect.right + offset,
+                top: rect.top + offset,
+                bottom: rect.bottom + offset
+            };
+        }
+        console.log(getBoundingClientRect1("div"));
+
+        function getBoundingClientRect2(element) {
+            var element = document.querySelector(element);
+            var scrollTop = document.documentElement.scrollTop,
+                scrollLeft = document.documentElement.scrollLeft;
+
+            if (element.getBoundingClientRect) {
+                if (typeof arguments.callee.offset != 'number') {
+                    var temp = document.createElement('div');
+                    temp.style.cssText = 'position: absolute; left:0; top:0';
+                    document.body.appendChild(temp);
+                    arguments.callee.offset = -temp.getBoundingClientRect().top - scrollTop;
+                    document.body.removeChild(temp);
+                    temp = null;
+                }
+                var rect = element.getBoundingClientRect();
+                var offset = arguments.callee.offset;
+
+                return {
+                    left: rect.left + offset,
+                    right: rect.right + offset,
+                    top: rect.top + offset,
+                    bottom: rect.bottom + offset
+                };
+            }else {
+                var actualLeft = getElementLeft(element);
+                var actualTop = getElementTop(element);
+
+                return {
+                    left: actualLeft - scrollLeft,
+                    right: actualLeft - element.offsetWidth - scrollLeft,
+                    top: actualTop - scrollTop,
+                    bottom: actualTop + element.offsetHeight - scrollTop
+                };
+            }
+        }
+
+        console.log(getBoundingClientRect2('ul'));
+```
+
+
+
+3、遍历
+
+```javascript
+//NodeIterator遍历函数，有四个参数：遍历根节点、要访问节点类型、过滤器、是否扩展实体引用
+        var div1 = document.querySelector('#div1');
+        //定义过滤器
+        var filter = function (node) {
+            return node.tagName.toLowerCase() === "li" ? NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_SKIP;
+        };
+        //
+        var iterator = document.createNodeIterator(div1, NodeFilter.SHOW_ELEMENT, filter, false);
+        var node = iterator.nextNode();
+
+        while (node !== null) {
+            console.log(node.tagName.toLowerCase());
+            node = iterator.nextNode();
+        }
+//TreeWalker比以上方法更灵活
+        /*
+        walker.parentNode():
+        walker.firstChild():
+        walker.lastChild():
+        walker.nextSibling():
+        walker.previousSibling():
+         */
+        var filter = function (node) {
+            return node.tagName.toLowerCase() === "li" ? NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_SKIP;
+        };
+        //
+        var walker = document.createTreeWalker(div1, NodeFilter.SHOW_ELEMENT, filter, false);
+        var node = walker.nextNode();
+
+        while (node !== null) {
+            console.log(node.tagName.toLowerCase());
+            node = walker.nextNode();
+        }
+        //currentNode表示遍历方法在上一次遍历中返回的节点
+        console.log(walker.currentNode);
+        walker.currentNode = document.body;
+        console.log(walker.currentNode);
+```
+
+
+
+4、范围
+
+```javascript
+//待补充
+```
 
